@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="fr">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Gestion de la configuration dans le SI</title>
+
+		<meta name="description" content="Une brève vue d'ensemble des avantages d'automatiser ses configurations et ses déploiements">
+		<meta name="author" content="Barthélemy Vessemont">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<!-- Slide 1 -->
+				<section>
+					<h1>Gestion de la</h1>
+					<h1>configuration</h1></br>
+					<h3>De l'avantage d'automatiser son SI</h3>
+					<p>
+						<small> <a href="mailto:barthelemy.vessemont@photobox.com">Barthélemy Vessemont</a>  -  Photobox</small>
+					</p>
+				</section>
+
+				<!-- Slide 2 -->
+				<section>
+					<h2>Pour ceux qui n'ont pas le temps ...</h2>
+					<img src="paresseux3.png" alt="animal-paresseux">
+					<br /><p>L'objectif est <i>in fine</i> de faciliter et d'accélérer les processus de configuration et de déploiement d'applications, tout en offrant l'avantage de distribuer et maintenir à jour très simplement les machines actuelles et futures.
+					</p>
+					<p>Pour ce faire, il est conseillé d'amorcer une transition vers des outils de gestion centralisée de configuration, permettant une flexibilité et une réactivité hors d'atteinte des outils actuels.
+					</p>
+					<aside class="notes">
+					</aside>
+				</section>
+
+				<!-- Slide 3 -->
+				<section>
+					<h2>Avant la gestion : la configuration !</h2>
+					<p>
+						Qu'est ce que la configuration, quelles sont ses qualités intrinsèques et qu'attend-on d'elle ?
+					</p>
+					<p>
+						Comment traduisons nous aujourd'hui techniquement le concept de configuration, où se trouve l'information ?
+					</p>
+					<p>
+						Quelles sont nos méthodes pour l'administrer ?
+					</p>
+
+					<aside class="notes">
+						Configuration : description du comportement d'un service, de ses composants, de ses interfaces et backends<br />
+                                                Attentes : on doit pouvoir : la retrouver, la consulter, la comprendre, la regénerer, la versionner, la mettre à jour ... <br />
+						Technique : fichiers, bases de données, tableurs, wiki<br />
+                                                Administration : manuelle via SSH, traitement de masse Rundeck
+					</aside>
+				</section>
+
+				<!-- Slide 4 -->
+				<section>
+					<section>
+						<h2>La configuration en pratique</h2>
+						<p>Comment configurer ...</p>
+						<p class="fragment">... 1 serveur ?</p>
+						<p class="fragment">... 100 serveurs ?</p>
+						<p class="fragment">... 10000 serveurs ?</p><br />
+						<p class="fragment"><img src="fb.png" alt="facebook-datacenter"><br />;-)</p>
+						<aside class="notes">
+							Attention ! :)
+						</aside>
+					</section>
+					<section>
+						<h2>Solutions</h2>
+						<p>Plusieurs stratégies peuvent être adoptées :</p>
+						<p><b>À la mimine</b></p>
+						<ul>
+							<li>Documentations, wiki, tableurs -> SSH</li>
+							<li>Temps de déploiement, de maintien et de mise à jour exponentiel avec le nombre d'instances</li><br />
+						</ul>
+						<p><b>Via des scripts</b></p>
+						<ul>
+							<li>Connexion en SSH, récupération du script et exécution</li>
+							<li>Scripts versionnés et bichonnés</li><br />
+						</ul>
+						<p><b>Le gestionnaire de configuration</b></p>
+						<p class="fragment"><i>Aujourd'hui Photobox se situe entre la solution 1 et 2 grâce a son système PXE à base de scripts et à ses documentations disponibles</i></p>
+						<aside class="notes">
+						1. On peut maîtriser de manière unitaire toutes les installations et donc facilement identifier les problèmes<br />
+						1. On dispose d'une connaissance précise et réelle des briques de ses machines.<br />
+						2. Grosses problématiques quand on s'attaque à un parc multi-distribution / multi-rôle / multi-contexte ...
+						3. OKAAAYYYY FOOOOO !
+						</aside>
+					</section>
+				</section>
+
+				<!-- Slide 5 -->
+				<section>
+					<section>
+						<h2>Convergences et divergences</h2>
+						<p>Concepts de convergence et de divergence dans les configurations d'un parc</p>
+						<img src="optical-illusion-485x728.jpg" alt="optical-illusion">
+					</section>
+					<section>
+						<h2>La convergence en pratique</h2>
+						<ul>
+							<li>Chaque action unitaire réalisée sur un serveur doit systématiquement être reportée sur ses voisins pour maintenir la cohérence et l'homogénéité du parc</li><br />
+							<li>L'inventaire et les différents contextes des serveurs et des applications doivent être disponibles et accessibles simplement par les opérateurs</li><br />
+							<li>La génération d'une configuration doit être au maximum procédurale et deterministe selon un schéma précis</li><br />
+							<li>Sans l'application de contraintes régulières sur les configurations, l'architecture ne peut que diverger</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Ne pas accumuler de dette technique</h2>
+						<ul>
+							<li>Les serveurs suivent les mêmes règles de configuration, mais évoluent dans des contextes propres : selon le dimentionnement, le rôle, la localisation ...</li><br />
+							<li>La mise à jour d'une option, d'une règle, ou d'un nouveau composant sur l'ensemble de son parc n'est plus un risque ou une opération lourde</li><br />
+							<li>On ne modifie plus directement les instances, mais uniquement les règles qui les régissent</li><br />
+							<li>Simplification des tests et des déploiements, réduction du temps de validation : fonctionnel pour 1, donc pour 1000 !</li>
+						</ul>
+
+					</section>
+					<section>
+						<h2>Objectif</h2>
+						<img src="Actual-Work-to-Do-Office-Thoughts-Meme1.png" alt="Lazy-Worker">
+						<p><b>On ne touche plus aux serveurs :<br />on en fait la description et ils s'autogèrent !</b></p>
+					</section>
+				</section>
+
+				<!-- Slide 6 -->
+				<section>
+					<section>
+					<h2>Un nouveau paradigme</h2>
+						<ul>
+							<li>Passer de la réalisation d'une action à sa simple description</li><br />
+							<li>Le fix <i>"quick & dirty"</i> devient l'exception et doit faire l'objet d'une mise à jour upstream</li><br />
+							<li>L'architecture est <i>"drivée"</i> par le code, validée, sauvegardée, consolidée, versionnée, publique et partagée <i>(modèle IaC)</i></li><br />
+							<li>Un modèle peut être testé instantanément et mis en production suivant des cycles courts</li><br />
+							<li>Tout le monde peut collaborer et proposer ses innovations</li><br />
+							<li>Plus besoin de réinventer la roue dans la majorité des cas</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Des changements à prévoir !</h2>
+						<p>Une conduite de changement sur les méthodes et les pratiques est donc à mener sur le long terme, car cette transition majeure ne peut être imposée aux équipes</p>
+						<p>Des outils facilitant l'utilisation et promouvant la gestion de configuration devront être mis à disposition et illustrés. La migration ne peut être au final que progressive et plébicitée</p>
+						<img class="fragment" src="obama-laugh-you-want-change-lol2.jpg" alt="obama-change-irony">
+					</section>
+				</section>
+
+				<!-- Slide 7 -->
+				<section>
+					<section>
+						<h2>Et concrètement ?</h2>
+						<p>Prenons l'exemple sur l'une des dernières modification réalisée sur les scripts d'installation actuels :</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+########################
+#---- Setup SWAP   ----#
+########################
+if [ `free -tm | grep "Mem:" | awk {'print $2'}` -lt 16000 ]
+then
+        dd if=/dev/zero of=/data/irenderer.swap bs=1024M count=8
+        sync
+        mkswap /data/irenderer.swap
+        chmod -v 600 /data/irenderer.swap
+        if [ `grep -i irenderer.swap /etc/fstab -c` -eq 0 ]
+        then
+                echo "# Swap File Irenderer" >> /etc/fstab
+                echo "/data/irenderer.swap swap swap defaults 0 0" >> /etc/fstab
+        fi
+fi
+						</code></pre>
+					</section>
+					<section>
+						<h2>Et concrètement ?</h2>
+						<p>La mise en place via un gestionnaire de configuration permet d'abstraire le côté système et ne s'interesser qu'à la description :</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+#------metadata-------#
+depends          'swap'
+
+
+#------attributes------#
+default['iprod']['core']['memlimit'] = 16777216  #kB
+
+
+
+#------description-----#
+swap_file '/data/irenderer.swap' do
+  size      8192    # MBs
+  persist
+  only_if { node['memory']['total'].to_i < node['iprod']['core']['memlimit'] }
+end
+
+						</code></pre>
+						<p>Plus d'écriture dans fstab, plus besoin de dd/fallocate, plus de swapon ... C'est le script "swap_file" qui manage l'ensemble, gère tous les cas de figures et maintient à jour le fichier swap !</p>
+					</section>
+					<section>
+						<h2>Simple comme un bloc !</h2>
+						<p>La majeure partie des besoins peuvent se décrire au sein de blocs descriptifs courts et compréhensibles :</p>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+directory "/data/" do
+  not_if { Dir.exists?("/data") }
+  owner "root"
+  group "root"
+  mode 0755
+  action :create
+end
+
+user_account 'root' do
+  manage_home false
+  ssh_keys node['ssh']['root']['authorized_keys'] + node['ssh']['root']['local_keys']
+  action :modify
+end
+
+template "/etc/perl/CPAN/Config.pm" do
+  source "Config.pm.erb"
+  mode 0644
+  owner "root"
+  group "root"
+end
+
+node['iprod']['core']['packages'].each do |iprod|
+  package iprod
+end
+						</code></pre>
+						<img src="blocks.png" alt="minecraft-blocks">
+					</section>
+					<section>
+						<h2>Et pour les power-users ?</h2>
+						<p>Si les primitives natives ou les jeux de scripts de la communauté ne sont pas suffisants pour écrire la description attendue, il faudra développer (ou améliorer) le comportement souhaité au travers d'un language de scripting spécifique.</p>
+						<p>Ces développements pourront, s'ils concernent des briques standard, être libérés pour profiter de l'expertise et de l'experience de la communauté.</p>
+						<img class="fragment" src="moar_bird2.jpg" alt="meme-MOAR-bird">
+					</section>
+				</section>
+
+				<!-- Slide 8 -->
+				<section>
+					<section>
+						<h2>Cas d'école : déployer un NRPE Nagios ...</h2>
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+# diff photobox.cfg nrpe-deployer-sart.cfg 
+20d19
+< command[check_disk3]=/usr/lib/nagios/plugins/check_disk $ARG1$
+						</code></pre><br />
+						<p>But de l'opération : déployer une nouvelle règle sur les serveurs</p>
+						<ul>
+							<li>SSH sur chacune des instances ? (quelles instances ?)</li>
+							<li>Rundeck qui lance une commande patch ? (mais peut être certains serveurs utilisent nrpe.d/ et d'autre pas ?)</li>
+							<li>SCP de masse ?</li>
+							<li>On met tout dans /data et on fait des symlinks dans le système pour ne plus se préoccuper de la localisation du fichier ?</li>
+							<li>On corrige les différents deployer de machines (AU, SART ...) ?</li><br />
+							<li class="fragment"><b>Ou bien ... on met en place un gestionnaire de configuration ?</b></li>
+						</ul>
+					</section>
+					<section>
+						<h2>Cas d'école ... <i>bis</i></h2>
+						<img src="Shadok2.jpg" alt="shadoks-pompant">
+						<pre><code data-trim contenteditable style="font-size: 18px; margin-top: 20px;">
+include_recipe 'nagios::client'
+
+template '/etc/nagios/nrpe.d/photobox.cfg' do
+  source 'photobox.cfg.erb'
+  mode 0644
+  owner 'root'
+  group 'root'
+end
+						</code></pre>
+					</section>
+				</section>
+
+				<!-- Slide 9 -->
+				<section>
+					<h2>Hands on !</h2>
+					<p>Mise en pratique avec le module "globalinstaller" de la machine <i>"deployer"</i> PXE actuellement en production</p>
+					<ul>
+						<li>Outillage employé</li>
+						<li>Dépendances : comment ne pas réinventer la roue</li>
+						<li>Concepts de noeuds, d'environnements, de rôles et d'attributs</li>
+						<li>Concevoir un script</li>
+						<li>Tester un bloc, un script</li>
+						<li>Déployer et passer en recette</li><br />
+					</ul>
+					<p>Démontration avec Chef en mode local</p>
+				</section>
+
+				<!-- Slide 10 -->
+				<section>
+					<h2>Centralisation / Décentralisation</h2>
+					<p>Deux concepts existent au sein de la gestion de configuration et peuvent cohabiter pour profiter au maximum du templating :</p><br />
+					<ul>
+						<li>Le mode centralisé : un serveur garde en mémoire le rôle de chaque noeud, il versionne également les jeux de scripts, les distribues et informe les noeuds de leurs contextes. Les noeuds viennent s'enregistrer régulièrement auprès de ce central pour demander leurs configurations</li><br />
+						<li>Le mode local : chaque noeud est capable d'executer un script de configuration versionné, selon une liste d'attributs et un contexte fournis en paramètres (ou par défaut)</li><br />
+					</ul>
+				</section>
+
+				<!-- Slide 11 -->
+				<section>
+					<h2>Utilisation d'un serveur central</h2>
+					<p>Démonstration de la manipulation d'un serveur central</p><br />
+					<ul>
+						<li>Chargement d'un jeu de scripts</li>
+						<li>Boostraping d'un noeud</li>
+						<li>Logs</li>
+						<li>Modification et versionning du jeu de scripts</li>
+						<li>Rechargement de la configuration</li>
+					</ul>
+					<img class="fragment" src="it-s-easy-mkay2.jpg" alt="south-park-mmmkay">
+				</section>
+
+				<!-- Slide 12 -->
+				<section>
+					<h2>Avantages d'un contexte centralisé</h2>
+					<ul>
+						<li>Notion d'inventaire</li>
+						<li>Application de règles spécifiques par rôle, extrême souplesse</li>
+						<li>API de pilotage et de consultation des données</li>
+						<li>Sauvegarde/restauration (reconstruction) de l'ensemble de l'architecture (IaC)</li>
+						<li>Versionnage et cohabitations de versions différentes de configurations, migrations</li>
+						<li>Gestion de pools, de frontaux et de serveurs de monitoring potentiellement simplifiée</li>
+					</ul>
+				</section>
+
+
+
+				<!-- Slide 13 -->
+				<section>
+					<h2>Discussions libres</h2>
+					<p>Conduite de changement, outils, spécificités du contexte Photobox, bouleversement des habitudes et des concepts standards, stratégie de migration, complexité et compétences, avantages et inconvénients, vision à long terme ... autre ?</p>
+					<p>Partagez votre avis !</p>
+					<img class="fragment" src="ig9.jpg" alt="meme-3h-meeting-no-work-done">
+				</section>
+
+				<!-- Slide 14 -->
+				<section>
+					<h1>FIN</h1>
+					<h3>Par <a href="mailto:barthelemy.vessemont@photobox.com">Barthélemy Vessemont</a> - Photobox</h3>
+					<p>Avec l'aide de <a href="https://github.com/hakimel/reveal.js">Reveal.js</a></p>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
